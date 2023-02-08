@@ -1,0 +1,63 @@
+'use strict';
+
+const fs = require('fs');
+
+process.stdin.resume();
+process.stdin.setEncoding('utf-8');
+
+let inputString = '';
+let currentLine = 0;
+
+process.stdin.on('data', function(inputStdin) {
+    inputString += inputStdin;
+});
+
+process.stdin.on('end', function() {
+    inputString = inputString.split('\n');
+
+    main();
+});
+
+function leituraDeLinha() {
+    return inputString[currentLine++];
+}
+
+function alternate(s) {
+    const dist=[...(new Set([...s]))]
+    let max=0
+    console.log(dist)
+    
+    function alternating(a,b){
+        let filteredstr=[...s].filter((x)=>x==a||x==b)
+        for(let i=0;i<filteredstr.length-1;i++){
+            if(((filteredstr[i]==a&&filteredstr[i+1]==b)||(filteredstr[i]==b&&filteredstr[i+1]==a))==false){
+                return ;
+            }
+        }
+        
+        if(filteredstr.length>max){
+            max=filteredstr.length
+            console.log(a,b)
+        }
+    }
+    for(let i=0;i<dist.length;i++){
+        for(let j=i+1;j<dist.length;j++){
+            alternating(dist[i],dist[j])
+        }
+    }
+    return max;
+}
+
+function main() {
+    const ws = fs.createWriteStream(process.env.OUTPUT_PATH);
+
+    const l = parseInt(readLine().trim(), 10);
+
+    const s = readLine();
+
+    const result = alternate(s);
+
+    ws.write(result + '\n');
+
+    ws.end();
+}

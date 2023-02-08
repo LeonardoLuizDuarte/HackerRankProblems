@@ -1,0 +1,75 @@
+function processData(input) {
+    var lines = input.split("\n");
+
+    function leituraDeLinha(){
+        var n = 0;
+        this.nxLn = function(){
+            return n++;
+        }
+    }
+
+    var leituraDeLinha = new leituraDeLinha();
+
+    var q = parseInt(lines[leituraDeLinha.nxLn()]);
+
+    var letrasMinusculas = function(value){
+        if(value.charCodeAt(0)>96){
+            return true;
+        } else {
+            return false;    
+        }
+    }
+
+    var letrasMaiusculas = function(value){
+        for(var i=0;i<value.length;i++){
+            if(!letrasMinusculas(value.substr(i,1))){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    while (q!==0) {
+        var a = lines[leituraDeLinha.nxLn()];
+        var b = lines[leituraDeLinha.nxLn()];
+
+        var condicao = true;
+
+        b.split("").forEach(val=>{
+            var ind = a.indexOf(val);
+            if(ind==-1){
+                ind = a.indexOf(val.toLowerCase());
+            }
+            if(ind==-1){
+                condicao = false;
+            }
+            if(letrasMaiusculas(a.substr(0,ind))){
+                condicao = false;
+            }
+            a = a.substr(ind+1);
+        });
+
+        if(letrasMaiusculas(a)){
+            condicao = false;
+        }
+
+        if(condicao){
+            console.log("YES");
+        } else {
+            console.log("NO");
+        }
+
+        q--;
+    }
+} 
+
+process.stdin.resume();
+process.stdin.setEncoding("ascii");
+_input = "";
+process.stdin.on("data", function (input) {
+    _input += input;
+});
+
+process.stdin.on("end", function () {
+   processData(_input);
+});
